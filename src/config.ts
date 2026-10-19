@@ -251,7 +251,7 @@ export const SCHEMA: Group[] = [
     title: 'Music',
     help: 'Plays after a guest opens the invitation, with a button to pause it.',
     fields: [
-      { key: 'url', label: 'Song', kind: 'audio', help: 'MP3 or M4A, up to 20 MB. Leave empty for no music.' },
+      { key: 'url', label: 'Song', kind: 'audio', help: 'MP3, M4A or AAC, up to 20 MB. Leave empty for no music.' },
       { key: 'title', label: 'Song name', kind: 'text', max: 80, help: 'Shown on the music button.' },
     ],
   },

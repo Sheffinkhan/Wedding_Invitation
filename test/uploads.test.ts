@@ -14,6 +14,8 @@ describe('detectMedia', () => {
     [pad('GIF89a'), 'image/gif'],
     [MP3, 'audio/mpeg'],
     [pad([0xff, 0xfb, 0x90, 0x00]), 'audio/mpeg'],
+    [pad([0xff, 0xf1, 0x50, 0x80]), 'audio/aac'],
+    [pad([0xff, 0xf9, 0x50, 0x80]), 'audio/aac'],
     [pad('\0\0\0\x20ftypM4A '), 'audio/mp4'],
     [pad('OggS'), 'audio/ogg'],
     [pad('RIFF\0\0\0\0WAVEfmt '), 'audio/wav'],
@@ -46,7 +48,7 @@ describe('uploads', () => {
     const uploads = createUploads(memoryStorage());
     const id = uploads.start();
     await uploads.part(id, 0, JPEG);
-    await expect(uploads.finish(id, 1, 'audio')).rejects.toThrow('MP3 or M4A');
+    await expect(uploads.finish(id, 1, 'audio')).rejects.toThrow('MP3, M4A or AAC');
     await expect(uploads.finish(id, 1, 'image')).rejects.toThrow('missing');
     const other = uploads.start();
     await uploads.part(other, 0, MP3);

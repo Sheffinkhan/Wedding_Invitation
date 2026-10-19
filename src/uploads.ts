@@ -29,6 +29,8 @@ export function detectMedia(data: Buffer): Detected | null {
   if (ascii(data, 0, 8) === '\x89PNG\r\n\x1a\n') return { kind: 'image', type: 'image/png', extension: 'png' };
   if (ascii(data, 0, 4) === 'RIFF' && ascii(data, 8, 12) === 'WEBP') return { kind: 'image', type: 'image/webp', extension: 'webp' };
   if (ascii(data, 0, 6) === 'GIF87a' || ascii(data, 0, 6) === 'GIF89a') return { kind: 'image', type: 'image/gif', extension: 'gif' };
+  // AAC in ADTS frames, as phones and WhatsApp save it: the same sync bits as MP3 but layer 00.
+  if (data[0] === 0xff && (data[1] & 0xf6) === 0xf0) return { kind: 'audio', type: 'audio/aac', extension: 'aac' };
   if (ascii(data, 0, 3) === 'ID3' || (data[0] === 0xff && (data[1] & 0xe0) === 0xe0 && (data[1] & 0x06) !== 0)) {
     return { kind: 'audio', type: 'audio/mpeg', extension: 'mp3' };
   }
@@ -90,7 +92,7 @@ export function createUploads(storage: Storage) {
         }
         const found = detectMedia(data);
         if (!found || found.kind !== kind) {
-          throw new UploadError(kind === 'image' ? 'Please choose a JPG, PNG or WebP photo.' : 'Please choose an MP3 or M4A file.');
+          throw new UploadError(kind === 'image' ? 'Please choose a JPG, PNG or WebP photo.' : 'Please choose an MP3, M4A or AAC file.');
         }
         return await storage.putFile(`uploads/${kind}-${randomBytes(12).toString('base64url')}.${found.extension}`, data, found.type);
       } finally {

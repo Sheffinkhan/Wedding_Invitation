@@ -46,6 +46,10 @@ npm test
 
 Then share the project's address (for example `https://wedding-invitation.vercel.app`) on WhatsApp. Until a Blob store is connected the invitation still works, showing `content/invitation.json`, but wishes and saving are switched off. Without `ADMIN_PASSWORD` the editor stays closed.
 
+### Upload buttons are greyed out?
+
+The deployment has no Blob store. The editor says so at the top and next to each upload button. Connect a Blob store with Public access to the project (step 2), then **Redeploy** (step 4): connecting a store only reaches deployments made after it.
+
 ## Changing the defaults in code
 
 `content/invitation.json` is the starting invitation. Edit it and redeploy if you prefer a file to the editor. Once something has been saved in the editor, the saved version is shown instead.

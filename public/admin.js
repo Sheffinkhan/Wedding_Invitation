@@ -172,7 +172,7 @@
     const progress = element('span', { className: 'media__progress', role: 'status' });
     const file = element('input', {
       type: 'file',
-      accept: kind === 'image' ? 'image/jpeg,image/png,image/webp' : 'audio/mpeg,audio/mp4,audio/x-m4a,audio/aac,.mp3,.m4a',
+      accept: kind === 'image' ? 'image/jpeg,image/png,image/webp' : 'audio/mpeg,audio/mp4,audio/x-m4a,audio/aac,.mp3,.m4a,.aac',
       hidden: true,
     });
     const choose = element('button', {
@@ -182,6 +182,8 @@
       disabled: !canSave,
     });
     const remove = element('button', { type: 'button', className: 'danger small', textContent: 'Remove' });
+    // Say why the button is off, right where it is clicked.
+    if (!canSave) progress.textContent = 'Uploading is off until a Blob store is connected. See the note at the top.';
 
     function paint() {
       const url = target[field.key];
@@ -640,7 +642,9 @@
         const notice = $('[data-storage-notice]');
         notice.hidden = false;
         notice.textContent =
-          'Saving, uploads, templates and guest wishes need a Vercel Blob store connected to this project. Until then the invitation shows content/invitation.json. You can still try designs in the preview.';
+          'This deployment has no Vercel Blob store, so saving, uploading photos and songs, templates and guest wishes are off. ' +
+          'To turn them on: in Vercel open this project, go to Storage, create a Blob store with Public access and connect it to the project, ' +
+          'then go to Deployments and Redeploy. Until then the invitation shows content/invitation.json; you can still try designs in the preview.';
         $('[data-save]').disabled = true;
       }
       buildForm();
