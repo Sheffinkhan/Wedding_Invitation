@@ -165,10 +165,31 @@
     );
   }
 
+  /** The video id in a YouTube link, as the server reads it, or null. */
+  function youtubeId(link) {
+    try {
+      const url = new URL(link);
+      const host = url.hostname.toLowerCase().replace(/^(www|m|music)\./, '');
+      let id = null;
+      if (host === 'youtu.be') id = url.pathname.split('/')[1];
+      else if (host === 'youtube.com' || host === 'youtube-nocookie.com') {
+        id = url.pathname === '/watch' ? url.searchParams.get('v') : /^\/(?:embed|shorts|live|v)\/([^/]+)/.exec(url.pathname)?.[1];
+      }
+      return id && /^[\w-]{11}$/.test(id) ? id : null;
+    } catch {
+      return null;
+    }
+  }
+
   function mediaControl(field, target, id, update) {
     const kind = field.kind;
     const preview = element('div', { className: 'media__preview' });
-    const linkInput = element('input', { type: 'url', id, value: target[field.key], placeholder: 'https://…' });
+    const linkInput = element('input', {
+      type: 'url',
+      id,
+      value: target[field.key],
+      placeholder: kind === 'audio' ? 'https://youtu.be/…' : 'https://…',
+    });
     const progress = element('span', { className: 'media__progress', role: 'status' });
     const file = element('input', {
       type: 'file',
@@ -191,7 +212,14 @@
       remove.hidden = !url;
       if (!url) preview.textContent = kind === 'image' ? 'No photo, the illustration is used' : 'No music';
       else if (kind === 'image') preview.append(element('img', { src: url, alt: '' }));
-      else preview.append(element('audio', { src: url, controls: true, preload: 'none' }));
+      else if (youtubeId(url)) {
+        preview.append(
+          element('div', { className: 'media__youtube' }, [
+            element('img', { src: `https://i.ytimg.com/vi/${youtubeId(url)}/mqdefault.jpg`, alt: '' }),
+            element('span', { textContent: 'YouTube song. Guests see it in a small player in the Our Song section, and it starts when they open the invitation.' }),
+          ]),
+        );
+      } else preview.append(element('audio', { src: url, controls: true, preload: 'none' }));
     }
 
     function set(url) {
@@ -226,7 +254,10 @@
       preview,
       element('div', { className: 'media__buttons' }, [choose, remove, progress]),
       file,
-      element('details', {}, [element('summary', { textContent: 'Or paste a link' }), linkInput]),
+      element('details', { open: kind === 'audio' }, [
+        element('summary', { textContent: kind === 'audio' ? 'Or paste a YouTube link' : 'Or paste a link' }),
+        linkInput,
+      ]),
     ]);
   }
 

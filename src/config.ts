@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { DESIGNS } from './designs.js';
+import { isYouTubeLink, parseYouTube } from './youtube.js';
 
 /**
  * Everything on the invitation that the couple can change. The editor is
@@ -53,6 +54,7 @@ export interface Invitation {
   closing: { message: string; signoff: string; image: string; footer: string };
   music: { url: string; title: string };
   labels: {
+    songHeading: string;
     eventsHeading: string;
     viewLocation: string;
     addToCalendar: string;
@@ -251,14 +253,20 @@ export const SCHEMA: Group[] = [
     title: 'Music',
     help: 'Plays after a guest opens the invitation, with a button to pause it.',
     fields: [
-      { key: 'url', label: 'Song', kind: 'audio', help: 'MP3, M4A or AAC, up to 20 MB. Leave empty for no music.' },
-      { key: 'title', label: 'Song name', kind: 'text', max: 80, help: 'Shown on the music button.' },
+      {
+        key: 'url',
+        label: 'Song',
+        kind: 'audio',
+        help: 'Upload an MP3, M4A or AAC (up to 20 MB), or paste a YouTube link. A YouTube song shows as a small player in an Our Song section, as YouTube requires. Leave empty for no music.',
+      },
+      { key: 'title', label: 'Song name', kind: 'text', max: 80, help: 'Shown on the music button and under a YouTube player.' },
     ],
   },
   {
     key: 'labels',
     title: 'Buttons and small headings',
     fields: [
+      { key: 'songHeading', label: 'Our Song heading', kind: 'text', max: 60, help: 'Shown above a YouTube song.' },
       { key: 'eventsHeading', label: 'Events heading', kind: 'text', max: 60 },
       { key: 'viewLocation', label: 'Location button', kind: 'text', required: true, max: 30 },
       { key: 'addToCalendar', label: 'Calendar button', kind: 'text', required: true, max: 30 },
@@ -373,6 +381,9 @@ function checkField(field: Field, value: unknown, where: string): string | boole
     case 'url':
       if (text.length > URL_MAX || !isSafeLink(text, field.kind !== 'url')) {
         throw new ConfigError(`${name} must be a web address starting with https://`);
+      }
+      if (field.kind === 'audio' && isYouTubeLink(text) && !parseYouTube(text)) {
+        throw new ConfigError(`${name} must link to one YouTube video. Copy the link from the video's Share button.`);
       }
       return text;
   }

@@ -45,7 +45,7 @@ A digital Muslim wedding invitation (Sahal & Sahadiya, Nikkah and Reception on 3
 - **Wishes are one document with ETag-checked writes** (`updateDoc`), so two guests posting at once cannot overwrite each other. No IP addresses are stored. Spam checks: hidden honeypot field, minimum time on page, link limit, duplicate check, per-instance rate limit, optional approval before showing. Without storage the page says wishes are not open; it never fakes a success.
 - **Uploads go in 3.5 MB parts** to stay under Vercel's 4.5 MB request limit, and are joined on the server. File type is read from the first bytes, never from the name. Photos are resized in the browser to 2000 px.
 - **Documents live in a randomly named Blob folder** (the store is public because photos and the song must load on guests' phones).
-- **Music starts only after the guest taps Open Invitation**, with a pause button, and pauses when the page is hidden.
+- **Music starts only after the guest taps Open Invitation**, with a pause button, and pauses when the page is hidden. The song is an uploaded file or a YouTube link. YouTube songs play in a visible player of at least 200 × 200 px in an Our Song section (YouTube's terms forbid hiding the player or taking only the audio), through the IFrame API on youtube-nocookie.com.
 - **Two access modes.** Locally the server binds to `127.0.0.1` and rejects foreign `Host`/`Origin`. Online the invitation is public, other sites' requests are refused, and the editor needs `ADMIN_PASSWORD` (12+ characters). Without it the editor answers only with a setup message.
 - **Reduced motion is respected**: no petals, parallax or entrance effects.
 

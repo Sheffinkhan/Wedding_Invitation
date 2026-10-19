@@ -23,6 +23,8 @@
   };
 
   // ---- Music ----
+  // Either an uploaded song in an <audio> element, or a YouTube video playing
+  // in the visible Our Song player. Both are driven the same way below.
 
   const audio = document.querySelector('[data-audio]');
   const musicButton = document.querySelector('[data-music]');
@@ -30,48 +32,107 @@
   const songTitle = data.music.title ? `: ${data.music.title}` : '';
   let wantsMusic = false;
 
+  function audioSong(element) {
+    function fadeIn() {
+      element.volume = 0;
+      const step = () => {
+        if (element.paused) return;
+        element.volume = Math.min(0.7, element.volume + 0.035);
+        if (element.volume < 0.7) setTimeout(step, 100);
+      };
+      step();
+    }
+    return {
+      play: () => element.play().then(fadeIn),
+      pause: () => element.pause(),
+      playing: () => !element.paused,
+      onChange(callback) {
+        element.addEventListener('play', callback);
+        element.addEventListener('pause', callback);
+      },
+    };
+  }
+
+  function youtubeSong({ id, start }) {
+    const holder = document.querySelector('[data-youtube-player]');
+    const listeners = [];
+    let player = null;
+    let ready = false;
+    let state = -1;
+
+    window.onYouTubeIframeAPIReady = () => {
+      player = new window.YT.Player(holder, {
+        host: 'https://www.youtube-nocookie.com',
+        videoId: id,
+        playerVars: { start, loop: 1, playlist: id, playsinline: 1, rel: 0 },
+        events: {
+          onReady() {
+            ready = true;
+            player.setVolume(70);
+            if (wantsMusic) player.playVideo();
+          },
+          onStateChange(event) {
+            state = event.data;
+            listeners.forEach((callback) => callback());
+          },
+          onError() {
+            // The owner may not allow playback on other sites; the link below the player still works.
+            holder.closest('.song')?.classList.add('song--error');
+            if (musicButton) musicButton.remove();
+          },
+        },
+      });
+    };
+    const script = document.createElement('script');
+    script.src = 'https://www.youtube.com/iframe_api';
+    script.async = true;
+    document.head.append(script);
+
+    return {
+      async play() {
+        if (ready) player.playVideo();
+      },
+      pause() {
+        if (ready) player.pauseVideo();
+      },
+      // 1 is playing, 3 is buffering.
+      playing: () => state === 1 || state === 3,
+      onChange: (callback) => listeners.push(callback),
+    };
+  }
+
+  const song = audio ? audioSong(audio) : data.music.youtube ? youtubeSong(data.music.youtube) : null;
+
   function showMusicState() {
-    if (!musicButton) return;
-    const playing = !audio.paused;
+    if (!musicButton || !song) return;
+    const playing = song.playing();
     musicButton.setAttribute('aria-pressed', String(playing));
     musicLabel.textContent = `${playing ? 'Pause' : 'Play'} music${songTitle}`;
   }
 
-  function fadeIn() {
-    audio.volume = 0;
-    const step = () => {
-      if (audio.paused) return;
-      audio.volume = Math.min(0.7, audio.volume + 0.035);
-      if (audio.volume < 0.7) setTimeout(step, 100);
-    };
-    step();
-  }
-
   function playMusic() {
-    if (!audio) return;
+    if (!song) return;
     wantsMusic = true;
-    audio
+    song
       .play()
-      .then(fadeIn)
       .catch(() => {})
       .finally(showMusicState);
   }
 
-  if (audio && musicButton) {
+  if (song && musicButton) {
     musicButton.addEventListener('click', () => {
-      if (audio.paused) playMusic();
+      if (!song.playing()) playMusic();
       else {
         wantsMusic = false;
-        audio.pause();
+        song.pause();
         showMusicState();
       }
     });
-    audio.addEventListener('pause', showMusicState);
-    audio.addEventListener('play', showMusicState);
+    song.onChange(showMusicState);
     // Pause while the guest is in another app, and pick up again when they return.
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) audio.pause();
-      else if (wantsMusic) audio.play().catch(() => {});
+      if (document.hidden) song.pause();
+      else if (wantsMusic) song.play().catch(() => {});
     });
   }
 

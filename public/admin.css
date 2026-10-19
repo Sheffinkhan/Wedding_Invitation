@@ -283,6 +283,19 @@ textarea {
   width: 100%;
 }
 
+.media__youtube {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  text-align: left;
+}
+
+.media__youtube img {
+  width: 160px;
+  border-radius: 8px;
+}
+
 .media__buttons {
   display: flex;
   flex-wrap: wrap;

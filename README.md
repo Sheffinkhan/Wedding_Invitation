@@ -7,7 +7,7 @@ A digital wedding invitation for **Sahal & Sahadiya**, made for guests who open 
 - Event cards (Nikkah and Reception) with **View Location** and **Add to Calendar** (Google Calendar, or an `.ics` file for iPhone and Outlook)
 - Venue with **Get Directions** and a QR code for the location
 - A dua for the couple, guest **wishes** that are saved for everyone to see (with likes and optional approval), and a closing message with a share button
-- Background music after the guest opens the invitation, with a pause button
+- Background music after the guest opens the invitation, with a pause button: an uploaded MP3, M4A or AAC, or a YouTube link
 
 ## The editor
 
@@ -17,6 +17,7 @@ Open `/admin`. Everything on the invitation can be changed there:
 - **Live preview** (phone or desktop size) that shows your changes before you save them.
 - **My templates**: save the whole invitation (design, wording, photos, song) under a name, load it back later, save over it or delete it. Up to five.
 - All wording, events (up to four), venue and map link, photos (couple, background, venue, closing, link preview), the song, button labels, which sections show, and the time zone.
+- **Song from YouTube**: paste a video link under Music instead of uploading a file. YouTube does not allow hiding its player, so the song appears as a small player in an **Our Song** section and starts when guests open the invitation. On some iPhones guests may need to tap the player once. Some music videos are blocked from playing on other websites by their owner; then only a "Listen on YouTube" link shows, so pick a video that plays when embedded, or upload the file.
 - **Guest wishes**: approve, hide or delete.
 
 Nothing changes for guests until you press **Save changes**. They see it within a minute.

@@ -1,6 +1,7 @@
 import type { Invitation } from './config.js';
 import { designById, FRAME_PATHS, fontsUrl, frameMask, type Design } from './designs.js';
 import { cardDate, longDate, resolveEvents, timeRange, weekday, type ResolvedEvent } from './events.js';
+import { parseYouTube, type YouTubeVideo } from './youtube.js';
 
 export interface PageOptions {
   /** e.g. https://example.vercel.app, for the link preview tags. */
@@ -159,6 +160,21 @@ ${
 </section>`;
 }
 
+/**
+ * A YouTube song plays in a visible player, as YouTube's terms require; the
+ * page script starts it when the guest opens the invitation.
+ */
+function song(inv: Invitation, video: YouTubeVideo): string {
+  const heading = inv.labels.songHeading;
+  const watch = `https://www.youtube.com/watch?v=${video.id}${video.start ? `&t=${video.start}s` : ''}`;
+  return `<section class="section song" id="song" aria-labelledby="song-title">
+${heading ? `<h2 class="title" id="song-title" data-reveal>${escapeHtml(heading)}</h2>` : '<h2 class="visually-hidden" id="song-title">Our song</h2>'}
+${inv.music.title ? `<p class="song__name" data-reveal>${escapeHtml(inv.music.title)}</p>` : ''}
+<div class="song__frame" data-reveal><div class="song__player" data-youtube-player></div></div>
+<a class="song__link" href="${escapeHtml(watch)}" target="_blank" rel="noopener">Listen on YouTube</a>
+</section>`;
+}
+
 function countdown(inv: Invitation, first: ResolvedEvent): string {
   const { countdown: c, labels } = inv;
   const unit = (key: string, label: string) =>
@@ -301,6 +317,7 @@ export function renderInvitation(inv: Invitation, options: PageOptions): string 
   const t = inv.theme;
   const design = designById(t.design);
   const asset = (file: string) => `/${file}?v=${encodeURIComponent(version)}`;
+  const youtube = inv.music.url ? parseYouTube(inv.music.url) : null;
 
   const data = {
     countdown: {
@@ -310,7 +327,7 @@ export function renderInvitation(inv: Invitation, options: PageOptions): string 
       ended: inv.countdown.endedMessage,
     },
     wishes: { available: options.wishesAvailable && s.wishes, likes: inv.wishes.likes },
-    music: { url: inv.music.url, title: inv.music.title },
+    music: { title: inv.music.title, youtube },
     share: { title: inv.site.title, text: inv.site.description },
   };
 
@@ -342,6 +359,7 @@ ${SPRITE}
 ${cover(inv, first, design)}
 <main id="invitation" tabindex="-1">
 ${s.intro ? intro(inv, first) : ''}
+${youtube ? song(inv, youtube) : ''}
 ${s.countdown ? countdown(inv, first) : ''}
 ${s.invitation ? invitationCard(inv) : ''}
 ${s.events ? events(inv, resolved) : ''}
@@ -356,7 +374,7 @@ ${
     ? `<button class="music" type="button" data-music hidden aria-pressed="false">${icon('music')}<span class="visually-hidden" data-music-label>Play music${
         inv.music.title ? `: ${escapeHtml(inv.music.title)}` : ''
       }</span><span class="music__bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
-<audio data-audio src="${escapeHtml(inv.music.url)}" preload="none" loop></audio>`
+${youtube ? '' : `<audio data-audio src="${escapeHtml(inv.music.url)}" preload="none" loop></audio>`}`
     : ''
 }
 <script type="application/json" id="invite-data">${scriptJson(data)}</script>
