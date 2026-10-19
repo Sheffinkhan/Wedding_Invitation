@@ -1,0 +1,8 @@
+node_modules/
+coverage/
+dist/
+
+# Local edits, wishes and uploads. Never commit.
+.data/
+.env
+.vercel

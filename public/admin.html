@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Invitation Editor</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/admin.css">
+<script src="/admin.js" defer></script>
+</head>
+<body>
+<header class="bar">
+  <p class="bar__title">Invitation editor</p>
+  <nav class="tabs" aria-label="Editor sections" hidden data-tabs>
+    <button type="button" class="tab" data-tab="edit" aria-current="page">Invitation</button>
+    <button type="button" class="tab" data-tab="wishes">Guest wishes <span class="badge" data-pending hidden></span></button>
+  </nav>
+  <div class="bar__actions">
+    <a class="link" href="/" target="_blank" rel="noopener" data-view-link>View invitation</a>
+    <button type="button" class="link" data-logout hidden>Sign out</button>
+  </div>
+</header>
+
+<main class="page">
+  <p class="loading" data-loading>Loading…</p>
+
+  <section class="panel" data-panel="setup" hidden>
+    <h1>Almost ready</h1>
+    <p data-setup-message></p>
+  </section>
+
+  <section class="panel panel--narrow" data-panel="login" hidden>
+    <h1>Sign in</h1>
+    <form class="login" data-login>
+      <label class="field">
+        <span class="field__label">Editor password</span>
+        <input type="password" name="password" autocomplete="current-password" required>
+      </label>
+      <button class="primary" type="submit">Sign in</button>
+      <p class="status" data-login-status role="status"></p>
+    </form>
+  </section>
+
+  <section data-panel="edit" hidden>
+    <div class="workspace">
+      <div class="workspace__form">
+        <p class="notice" data-storage-notice hidden></p>
+
+        <section class="box" aria-labelledby="templates-title">
+          <div class="box__head">
+            <h2 id="templates-title">My templates</h2>
+            <span class="hint" data-template-count></span>
+          </div>
+          <p class="hint">Save the whole invitation (design, wording, photos and song) to come back to later. Loading a template puts it in the editor; press Save changes to publish it.</p>
+          <div class="template-list" data-template-list></div>
+          <div class="template-save">
+            <input type="text" maxlength="40" placeholder="Template name, for example Reception guests" aria-label="Template name" data-template-name>
+            <button type="button" class="secondary" data-template-save>Save as template</button>
+          </div>
+          <p class="status" data-template-status role="status" aria-live="polite"></p>
+        </section>
+
+        <form class="editor" data-editor novalidate></form>
+      </div>
+
+      <aside class="preview" data-preview aria-label="Preview">
+        <div class="preview__bar">
+          <strong>Preview</strong>
+          <div class="segmented" role="group" aria-label="Preview size">
+            <button type="button" data-device="phone" aria-pressed="true">Phone</button>
+            <button type="button" data-device="desktop" aria-pressed="false">Desktop</button>
+          </div>
+          <button type="button" class="secondary small" data-preview-reload>Reload</button>
+          <button type="button" class="secondary small preview__close" data-preview-close>Close</button>
+        </div>
+        <div class="preview__stage" data-stage>
+          <iframe title="Invitation preview" data-preview-frame></iframe>
+        </div>
+        <p class="preview__status" data-preview-status role="status">Changes show here before you save them.</p>
+      </aside>
+    </div>
+    <button type="button" class="preview-open primary" data-preview-open>Preview</button>
+  </section>
+
+  <section data-panel="wishes" hidden>
+    <div class="wishes-head">
+      <h1>Guest wishes</h1>
+      <button type="button" class="secondary" data-refresh>Refresh</button>
+    </div>
+    <p class="hint">Hidden wishes stay out of sight on the invitation. Deleting is permanent.</p>
+    <div class="wishes" data-wishes></div>
+  </section>
+</main>
+
+<div class="savebar" data-savebar hidden>
+  <p class="status" data-save-status role="status" aria-live="polite"></p>
+  <button type="button" class="primary" data-save>Save changes</button>
+</div>
+</body>
+</html>

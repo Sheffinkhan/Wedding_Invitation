@@ -1,0 +1,122 @@
+{
+  "couple": {
+    "groom": "Sahal",
+    "bride": "Sahadiya",
+    "joiner": "with"
+  },
+  "cover": {
+    "bismillah": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+    "label": "Wedding Invitation",
+    "dateText": "",
+    "button": "Open Invitation",
+    "image": ""
+  },
+  "events": [
+    {
+      "title": "Nikkah",
+      "date": "2027-01-03",
+      "start": "11:30",
+      "end": "",
+      "note": "1448 Rajab 25",
+      "venue": "",
+      "mapsUrl": ""
+    },
+    {
+      "title": "Reception",
+      "date": "2027-01-03",
+      "start": "18:00",
+      "end": "21:00",
+      "note": "",
+      "venue": "",
+      "mapsUrl": ""
+    }
+  ],
+  "intro": {
+    "heading": "The Wedding of",
+    "message": "By the grace of Allah, we invite you to share in the joy and blessings of our wedding celebration.",
+    "verseArabic": "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً",
+    "verseTranslation": "And among His signs is that He created for you spouses from among yourselves, so that you may find tranquillity in them, and He placed between you love and mercy.",
+    "verseReference": "Surah Ar-Rum 30:21",
+    "image": ""
+  },
+  "countdown": {
+    "heading": "Counting the days",
+    "startedMessage": "Alhamdulillah, the celebration has begun.",
+    "endedMessage": "Alhamdulillah. Thank you for celebrating with us."
+  },
+  "invitation": {
+    "heading": "Wedding Invitation",
+    "hosts": "Mr. Siyad K A & Mrs. Haseena Siyad",
+    "hostsAddress": "Kavanad House, Vazhakkala,\nKakkanad P.O., Ernakulam Dist.",
+    "message": "Cordially solicit your prayers and esteemed presence with family on the auspicious occasion of the marriage of their beloved son",
+    "groomDetails": "",
+    "brideDetails": "D/o Mr. T M Salam & Mrs. Sumayya Salam\nThattuparambil House, Cheruvattor P.O.,\nKothamangalam."
+  },
+  "venue": {
+    "heading": "Venue",
+    "name": "Padamugal Madrassa Hall",
+    "address": "Padamugal, Kakkanad,\nErnakulam, Kerala",
+    "directions": "",
+    "mapsUrl": "",
+    "image": "",
+    "showQr": true,
+    "qrLabel": "Scan for location"
+  },
+  "blessing": {
+    "heading": "A Prayer for the Couple",
+    "arabic": "بَارَكَ اللَّهُ لَكَ، وَبَارَكَ عَلَيْكَ، وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ",
+    "translation": "May Allah bless you, shower His blessings upon you, and unite you both in goodness.",
+    "reference": "Sunan Abi Dawud 2130"
+  },
+  "wishes": {
+    "heading": "Wishes & Duas",
+    "intro": "Leave a dua or a few kind words for the couple.",
+    "likes": true,
+    "requireApproval": false
+  },
+  "closing": {
+    "message": "May Allah bless our union with love, mercy, happiness, and endless barakah.",
+    "signoff": "With love,",
+    "image": "",
+    "footer": "Made with love for our special day."
+  },
+  "music": {
+    "url": "",
+    "title": ""
+  },
+  "labels": {
+    "eventsHeading": "Save the Date",
+    "viewLocation": "View Location",
+    "addToCalendar": "Add to Calendar",
+    "directions": "Get Directions",
+    "sendWishes": "Send Wishes",
+    "share": "Share Invitation",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
+  },
+  "theme": {
+    "design": "royal",
+    "navy": "#0e1b3d",
+    "ivory": "#fbf7ef",
+    "mist": "#d6e2ee",
+    "gold": "#c6a46a"
+  },
+  "sections": {
+    "intro": true,
+    "countdown": true,
+    "invitation": true,
+    "events": true,
+    "venue": true,
+    "blessing": true,
+    "wishes": true,
+    "closing": true
+  },
+  "site": {
+    "title": "Sahal & Sahadiya · Wedding Invitation",
+    "description": "Nikkah & Reception · Sunday, 3 January 2027 · Padamugal Madrassa Hall",
+    "shareImage": "",
+    "utcOffset": "+05:30"
+  }
+}
